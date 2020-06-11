@@ -1,5 +1,3 @@
-package TrabalhoLP;
-
 import java.util.*;
 
 public class Cidade implements Comparable<Cidade>  {
