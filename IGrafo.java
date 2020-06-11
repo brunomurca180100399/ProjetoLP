@@ -1,6 +1,8 @@
 public interface IGrafo {
 
-	public int addCidade(String nome);
+	public int addCidade(Cidade n);
+	
+	public void RemoverCidade(Cidade n);
 
 	public void encontraMenorCaminho(Cidade origem);
 
