@@ -1,5 +1,3 @@
-package TrabalhoLP;
-
 public class Ligacao implements Comparable<Ligacao> {
 
 	protected double horas;
