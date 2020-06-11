@@ -1,101 +1,50 @@
+package TrabalhoLP;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-	public class Grafo {
-		private Set<Cidade> cidades;
-		private boolean grafoDirecionado;
-	
+public class Grafo {
 
-	// Construtores
-	public Grafo(boolean grafoDirecionado) {
-		this.grafoDirecionado = grafoDirecionado;
+	private Set<Cidade> cidades;
+	private PriorityQueue<Cidade> queueCidade = new PriorityQueue<>();
+
+	public Grafo() {
 		cidades = new HashSet<>();
 	}
+
+	public void addCidade(Cidade n) {
+		cidades.add(n);
+	}
 	
-	public Grafo() {
-		grafoDirecionado=true;
+	public void RemoverCidade(Cidade n) {
+		cidades.remove(n);
 	}
 
-	// Getters e setters
-
-	public void addCidade(Cidade cidade){
-		cidades.addAll(Arrays.asList(cidade));
-	}
-
-	public void addLigacao(Cidade origem, Cidade destino, double horas) {
-		cidades.add(origem);
-		cidades.add(destino);
-
-		adicionaLigacao(origem, destino, horas);
-
-		if (!grafoDirecionado && origem != destino) {
-			adicionaLigacao(destino, origem, horas);
-		}
-	}
-
-	private void adicionaLigacao(Cidade cidade1, Cidade cidade2, double horas) {
-		for (Ligacao ligacao : cidade1.ligacoes) {
-			if (ligacao.getOrigem() == cidade1 && ligacao.getDestino() == cidade2) {
-				ligacao.horas = horas;
-			}
-		}
-		cidade1.ligacoes.add(new Ligacao(cidade1, cidade2, horas));
-	}
-
-	public void imprimeLigacoes() {
-		for (Cidade cidade : cidades) {
-			LinkedList<Ligacao> ligacoes = cidade.ligacoes;
-
-			if (ligacoes.isEmpty()) {
-				System.out.println("A Cidade " + cidade.getNome() + " não tem voos disponíveis.");
-				continue;
-			}else {
-			System.out.print("A Cidade " + cidade.getNome() + " tem voo para ");
-			}
-			for (Ligacao ligacao : ligacoes) {
-				System.out.print(ligacao.getDestino().getNome() + " Duração Voo: " + ligacao.getHoras() + " horas  ");
+	public void encontraMenorCaminho(Cidade origem){
+		origem.setDistanciaMinima(0.0);
+		queueCidade.add(origem);
+		while (!queueCidade.isEmpty()) {
+			Cidade c = queueCidade.poll();
+			for (Ligacao l : c.getLigacoes()) {
+				Cidade destino = l.getDestino();
+				double peso = l.getHoras();
+				double distanciaAtravesC = peso + c.getDistanciaMinima();
+				if(distanciaAtravesC < destino.getDistanciaMinima()) {
+					destino.setDistanciaMinima(distanciaAtravesC);
+					destino.setCidadeAnterior(c);
+					queueCidade.remove(destino);
+					queueCidade.add(destino);
+				}
 			}
 		}
 	}
-
-	public boolean temLigacao(Cidade origem, Cidade destino) {
-		LinkedList<Ligacao> ligacoes = origem.ligacoes;
-		for (Ligacao ligacao : ligacoes) {
-			if (ligacao.getDestino() == destino) 
-			return true;		
+	
+	public List<Cidade> criarCaminho(Cidade destino){
+		List<Cidade> caminho = new ArrayList<Cidade>();
+		for (Cidade c = destino; c!=null; c=c.getCidadeAnterior()) {
+			caminho.add(c);
 		}
-		return false;
+		Collections.reverse(caminho);
+		return caminho;
 	}
 	
-	public void limpaCidadesVisitadas() {
-	for (Cidade cidade : cidades) {
-		cidade.naoVisitado();
-		}
-	}
-		
-	public void encontraMenorCaminho(Cidade origem, Cidade destino) {
-	
-	}
-	
-	private Cidade cidadeVizinhaPorVisitar(HashMap<Cidade, Double> caminhoMaisCurto) {
-		double menorDistancia =  10000000000000.0;
-		Cidade cidadeMaisProxima = null;
-		for (Cidade cidade : cidades) {
-			double distanciaAtual = caminhoMaisCurto.get(cidade);
-			
-			if (cidade.isFoiVisitado() && distanciaAtual ==  10000000000000.0)
-				continue;
-			if (distanciaAtual < menorDistancia) {
-				menorDistancia = distanciaAtual;
-				cidadeMaisProxima = cidade;
-			}
-		}
-		return cidadeMaisProxima;
-	}
-	
-
 }
