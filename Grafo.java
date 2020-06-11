@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Grafo {
+public class Grafo implements IGrafo{
 
 	private Set<Cidade> cidades;
 	private PriorityQueue<Cidade> queueCidade = new PriorityQueue<>();
@@ -8,15 +8,18 @@ public class Grafo {
 	public Grafo() {
 		cidades = new HashSet<>();
 	}
-
+	
+	@Override
 	public void addCidade(Cidade n) {
 		cidades.add(n);
 	}
 	
+	@Override
 	public void RemoverCidade(Cidade n) {
 		cidades.remove(n);
 	}
-
+	
+	@Override
 	public void encontraMenorCaminho(Cidade origem){
 		origem.setDistanciaMinima(0.0);
 		queueCidade.add(origem);
@@ -36,6 +39,7 @@ public class Grafo {
 		}
 	}
 	
+	@Override
 	public List<Cidade> criarCaminho(Cidade destino){
 		List<Cidade> caminho = new ArrayList<Cidade>();
 		for (Cidade c = destino; c!=null; c=c.getCidadeAnterior()) {
