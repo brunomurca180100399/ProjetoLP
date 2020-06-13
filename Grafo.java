@@ -40,6 +40,26 @@ public class Grafo implements IGrafo{
 	}
 	
 	@Override
+	public void encontraMaiorCaminho(Cidade origem){
+		origem.setDistanciaMaxima(0.0);
+		queueCidade.add(origem);
+		while (!queueCidade.isEmpty()) {
+			Cidade c = queueCidade.poll();
+			for (Ligacao l : c.getLigacoes()) {
+				Cidade destino = l.getDestino();
+				double peso = l.getHoras();
+				double distanciaAtravesC = peso + c.getDistanciaMaxima();
+				if(distanciaAtravesC > destino.getDistanciaMaxima()) {
+					destino.setDistanciaMaxima(distanciaAtravesC);
+					destino.setCidadeAnterior(c);
+					queueCidade.remove(destino);
+					queueCidade.add(destino);
+				}
+			}
+		}
+	}
+	
+	@Override
 	public List<Cidade> criarCaminho(Cidade destino){
 		List<Cidade> caminho = new ArrayList<Cidade>();
 		for (Cidade c = destino; c!=null; c=c.getCidadeAnterior()) {
