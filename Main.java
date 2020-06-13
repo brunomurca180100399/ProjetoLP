@@ -24,6 +24,10 @@ public class Main {
 		aeroporto.encontraMenorCaminho(origem);
 		List<Cidade> caminhoMin = aeroporto.criarCaminho(destino);
 		System.out.println(caminhoMin.toString() + " Tempo de Viagem: " + destino.getDistanciaMinima() + " horas.");
+		
+		aeroporto.encontraMaiorCaminho(origem);
+		List<Cidade> caminhoMax = aeroporto.criarCaminho(destino);
+		System.out.println(caminhoMax.toString() + " Tempo de Viagem: " + destino.getDistanciaMaxima() + " horas.");
 	}
 
 }
